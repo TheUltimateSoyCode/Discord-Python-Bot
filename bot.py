@@ -1,6 +1,9 @@
-import datetime
 from discord import client, Message
+from pathlib import Path
+from bs4 import BeautifulSoup
+from discord.ext import commands
 import aiohttp
+import datetime
 import random
 import requests
 import time
@@ -11,10 +14,6 @@ import json
 import humanize
 import psutil
 import discord
-from pathlib import Path
-import discord
-from bs4 import BeautifulSoup
-from discord.ext import commands 
 import subprocess
 
 start_time = time.time()
@@ -24,7 +23,7 @@ intents.members = True
 intents.message_content = True
 intents.members = True
 
-bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
+bot = commands.Bot(command_prefix=":", intents=discord.Intents.all())
 
 @bot.event
 async def on_message(message: Message):
@@ -39,16 +38,23 @@ async def on_message(message: Message):
         await message.channel.send(new_message)
 
     if message.author == bot.user: return
-
     num1 = random.randint(1,12) 
     if num1 == 1:
         message_split = message.content.split()
         emoji = '💩'
         await message.add_reaction(emoji)
 
-    user = message.author
-    if user.bot:
-        return
+    if message.author == bot.user: return
+    num2 = random.randint(1,10) 
+    if num2 == 1:
+        answer = ("нет", "да", "хуйня")
+        await message.channel.send(random.choice(answer))
+
+    if message.author == bot.user: return
+    num3 = random.randint(1,25) 
+    if num3 == 1:
+        answer = ("пошёл нахуй", "пидарас", "завали ебало")
+        await message.channel.send(random.choice(answer))
 
     user_id = message.author.id
     content = message.content
@@ -66,7 +72,7 @@ async def on_message(message: Message):
 async def on_ready():
     await bot.change_presence(activity=discord.Game(name='BASED✅ FREE✅ WHITE✅ SUCKLESS✅ GIGACHAD✅ OPEN-SOURCE✅'))
 
-@bot.command()
+@bot.command(aliases = ("p",))
 async def ping(ctx):
     ram = (psutil.virtual_memory())
     cpu = psutil.cpu_percent()
@@ -80,7 +86,7 @@ async def ping(ctx):
         tab = "[|||||||||||||    ]"
     else:
         tab = "[|||||||||||||||||]"
- 
+
     uptime = time.time() - start_time
     latency = bot.latency * 1000 
     hours, remainder = divmod(uptime, 3600)
@@ -98,7 +104,7 @@ async def calc(ctx: commands.Context):
     message = f'{number}'
     await ctx.reply(message)
 
-@bot.command()
+@bot.command(aliases = ("w",))
 async def weather(ctx, city: str = None):
     with open("locations.json", "r") as f:
         locations = json.load(f)
@@ -110,7 +116,7 @@ async def weather(ctx, city: str = None):
             await ctx.reply(f'Please provide a city name or use !set to save your location.')
             return
 
-    api_key = '6fb752841c755527d680e32bf853f747'
+    api_key = ''
     url = f'https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric'
     response = requests.get(url)
     data = response.json()
@@ -167,7 +173,7 @@ def save_locations(self):
     with open('locations.json', 'w') as f:
         json.dump(self.locations, f)
 
-@bot.command()
+@bot.command(aliases = ("wi",))
 async def wiki(ctx: commands.Context, language, *, search : str):
     url = f'https://{language}.wikipedia.org/api/rest_v1/page/summary/{search}'
     response = requests.get(url)
@@ -181,7 +187,7 @@ async def wiki(ctx: commands.Context, language, *, search : str):
 
     await ctx.reply(message)
 
-@bot.command(description="Spams message chosen number of times")
+@bot.command()
 async def spam(ctx, count: int, *message):
     try:
         message = " ".join(message)
@@ -191,7 +197,7 @@ async def spam(ctx, count: int, *message):
         await ctx.send(message)
 
 
-@bot.command()
+@bot.command(aliases = ("t",))
 async def tl(ctx: commands.Context):
 
     message = [x.strip() for x in ctx.message.content.split("|", maxsplit=2)] 
@@ -211,7 +217,7 @@ async def tl(ctx: commands.Context):
     await ctx.reply(message)
 
 
-@bot.command()
+@bot.command(aliases = ("py",))
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def pyramid(ctx, emote: str, num: int = 3):
     if num < 1 or num > 20:
@@ -230,7 +236,7 @@ async def pyramid(ctx, emote: str, num: int = 3):
     for message in reversed(messages[:-1]):
         await ctx.send(message)
 
-@bot.command()  
+@bot.command(aliases = ("re",))
 async def remind(ctx):
     try:
         time, message = [x.strip() for x in ctx.message.content.split(maxsplit=2)[1:]]
@@ -252,7 +258,7 @@ def convert(time):
     value = int(time[:-1])
     return value * time_dict[unit]
 
-@bot.command()  
+@bot.command()
 async def site(ctx, site: str):
     url = f'https://sitecheck.sucuri.net/api/v3/?scan={site}'
     response = requests.get(url)
@@ -277,7 +283,7 @@ async def site(ctx, site: str):
 
     await ctx.reply(message)
 
-@bot.command()  
+@bot.command(aliases = ("u",))  
 async def user(ctx, user: typing.Optional[commands.UserConverter] = None):
     if user is None:
         user = ctx.author
