@@ -43,19 +43,7 @@ async def on_message(message: Message):
         message_split = message.content.split()
         emoji = '💩'
         await message.add_reaction(emoji)
-
-    if message.author == bot.user: return
-    num2 = random.randint(1,10) 
-    if num2 == 1:
-        answer = ("нет", "да", "хуйня")
-        await message.channel.send(random.choice(answer))
-
-    if message.author == bot.user: return
-    num3 = random.randint(1,25) 
-    if num3 == 1:
-        answer = ("пошёл нахуй", "пидарас", "завали ебало")
-        await message.channel.send(random.choice(answer))
-
+        
     user_id = message.author.id
     content = message.content
     time_ = datetime.datetime.now()
