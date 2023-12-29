@@ -1,9 +1,5 @@
 # vsndbot-Discord
 
-A quite simple discord bot, with some moderation/server management features, Can be helpful for newbies who want to "investigate" real instances to make their first bot.
-
-Generally, it has 21 different commands (Role management, "moderation" tools, and in-voice-channel playback) 
-
 1. **Ping** - Ping the bot
 2. **Spam** - Spam a message
 3. **User** - Get an info about user
@@ -22,8 +18,5 @@ Generally, it has 21 different commands (Role management, "moderation" tools, an
 16. **member mute** - Mute!
 17. **ls** - Member's last message.
 18. **join** - Join to your current voice channel
-19. **play** - Play a youtube link or link to direct audio/video stream.
 20. **stop** - Stop current audio.
-21. **playfile** - Play attached file. (thx to solarless for this one🤗)
-
-If you suddenly run into any lib errors, especially "pafy", just google the error and look for any github issues, there should be an answer that says you to git a fork of the lib (sorry for the goofy explanation. Im too lazy to test this code)
+21. **playfile** - Play attached file
