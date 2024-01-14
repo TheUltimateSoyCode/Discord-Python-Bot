@@ -156,7 +156,7 @@ async def calc(ctx: commands.Context):
 
 
 @bot.command(aliases = ("w",)) # Weather report to make it work you need to get an api key
-async def weather(ctx, city: str = None): # If there is nothing after command = eather send an error message or send actual weather if set their city in locations.json
+async def weather(ctx, city: str = None): # If there is nothing after command = either send an error message or send actual weather if set their city in locations.json
     with open("locations.json", "r") as f: # Open the file
         locations = json.load(f)
     
