@@ -235,21 +235,36 @@ def save_locations(self):
         json.dump(self.locations, f)
 ##
 
+@bot.command()
+async def wiki(ctx: commands.Context, language, *, search : str =None):
+    try:
+        if search is None:
+            url1 = f'https://en.wikipedia.org/api/rest_v1/page/summary/{language}'
+            response1 = requests.get(url1)
+            data1 = response1.json()
+                
+            title1 = data1['titles']['normalized']
+            more1 = data1['description']
+            link1 = data1['content_urls']['desktop']['page']
 
-@bot.command(aliases = ("wi",)) #Wikipedia command
-async def wiki(ctx: commands.Context, language, *, search : str):
-    url = f'https://{language}.wikipedia.org/api/rest_v1/page/summary/{search}'
-    response = requests.get(url)
-    data = response.json()
+            message1 = f'{title1} - {more1} | {link1}'
+            await ctx.reply(message1)
+            return
 
-    title = data['titles']['normalized']
-    more = data['description']
-    link = data['content_urls']['desktop']['page']
+        url = f'https://{language}.wikipedia.org/api/rest_v1/page/summary/{search}'
+        response = requests.get(url)
+        data = response.json()
+            
+        title = data['titles']['normalized']
+        more = data['description']
+        link = data['content_urls']['desktop']['page']
 
-    message = f'{title} - {more} | {link}'
+        message = f'{title} - {more} | {link}'
 
-    await ctx.reply(message)
-
+        await ctx.reply(message)
+    except Exception as e:
+        await ctx.reply(f"Nothing found")
+    return
 
 @bot.command() # Spam command, since discord are assholes it slow and works as shit. do not try to run it with numbers large than 20
 async def spam(ctx, count: int, *message):
