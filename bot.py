@@ -421,9 +421,13 @@ async def display(ctx, role_name: str):
 ####
 ####
 @role.command() # Create a new role. DO NOT USE SPACES. THE ROLE WILL BE CREATED WITHOUT ANY PERMISSIONS. Even without ping permissions, it means that you cant ping it
-async def create(ctx, name, color: discord.Color):
-  await ctx.guild.create_role(name=name, color=color) # Basic colours are shit, use hex from color picker
-  await ctx.reply(f"Created {name}") # Send message, ##a little TODO: put the whole code in "try:" to get error messages.
+async def create(ctx, name, color: discord.Color = None):
+    if color is None:
+        await ctx.guild.create_role(name=name, color=discord.Color.random()) # Make a new role with a random color
+        await ctx.reply(f"Created {name}") 
+    else:
+        await ctx.guild.create_role(name=name, color=color) # Make a new role with some color
+        await ctx.reply(f"Created {name}")
 ####
 ####
 @role.command() # Delete a role
