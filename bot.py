@@ -58,10 +58,10 @@ async def on_message(message: Message):
     
     if num1 == 1:
         message_split = message.content.split() # Get last message
-        emoji = '💩' # Emote (The main thing is its must to be supported by discord api)
+        emoji = '💩' # Emote (The main thing is it's must to be supported by discord api)
         await message.add_reaction(emoji) # Post reaction
     ##
-    ## Third on_message - Sends random word from the list with chance of 1 in X. (it's all it does fr fr)
+    ## Third on_message - Sends a random word from the list with chance of 1 in X. (it's all it does fr fr)
     ##
     if message.author == bot.user: return
     num2 = random.randint(1,100) # Chance of message
@@ -70,7 +70,7 @@ async def on_message(message: Message):
         answer = ("1", "2", "3", "4") # List of words
         await message.channel.send(random.choice(answer)) # Send the word
     ##
-    ##  The same thing but i used it to set different chance. you can ignore it
+    ##  The same thing but I used it to set a different chance. you can ignore it
     ##
     if message.author == bot.user: return
     num3 = random.randint(1,100) 
@@ -80,23 +80,22 @@ async def on_message(message: Message):
         await message.channel.send(random.choice(answer))
     ##
     ##
-    ## This one saves last message from users for the "ls" command, honestly should be replaced with json file, because it does not save messages after restart.
+    ## This one saves the last message from users for the "ls" command, honestly, this should be replaced with json file, because it doesn't save messages after restart.
     ##
-    ## *TODO*
+    ##
     user_id = message.author.id # User name
     content = message.content # Content of message 
     time_ = datetime.datetime.now() # Date of message
     last_seen[user_id] = (content, time_) 
     
-    last_seen_str = {k: (v[0], v[1].strftime("%Y-%m-%d %H:%M:%S")) for k, v in last_seen.items()} # time format
+    last_seen_str = {k: (v[0], v[1].strftime("%Y-%m-%d %H:%M:%S")) for k, v in last_seen.items()} # Time format
 
-    with open("last_seen.json", "w") as f: # it doesnt work 
+    with open("last_seen.json", "w") as f:
         json.dump(last_seen_str, f)
 
-    await bot.process_commands(message) # Now bot can process commands 
+    await bot.process_commands(message) # After this line the bot will execute the rest of the code
 
-## This was used to dynamicly change the presence of bot, but it crashes after some time (3 hours or smth). I dont know why
-##		TODO: find out and fix
+## This was used for dynamicly change the presence, but it crashes after some time (3 hours or smth). And I dont know why
 #async def presenceUwU():
 #    while True:
 #        random_status_text = ("1", "☭", "2") # List 
@@ -121,7 +120,7 @@ async def ping(ctx):
     ram = (psutil.virtual_memory()) # Get ram data
     cpu = psutil.cpu_percent() # Get average cpu load in percents
 
-    # My soydev try to make a graph of cpu load, Not much accurate but it works! 
+    # My soydev try to make a graph of cpu load, Not much accurate but it works
     if cpu < 10:
         tab = "[|                ]"
     elif cpu < 30:
@@ -135,7 +134,7 @@ async def ping(ctx):
     #
 
     uptime = time.time() - start_time # Get uptime from "start_time"
-    latency = bot.latency * 1000 # Get latency, idk if it's accurate but thats better than nothing.
+    latency = bot.latency * 1000 # Get latency
     hours, remainder = divmod(uptime, 3600) # Convert the time to hours
     minutes, seconds = divmod(remainder, 60) # Convert the time to minutes
     await ctx.reply(f'```Uptime: {int(hours)} hours {int(minutes)} minutes {int(seconds)} seconds. \n Ping: {round(latency)} ms \n CPU: {cpu}% {tab}\n RAM↴ \n    Used: {psutil.virtual_memory()[2]} MB \n    Available: {ram.available / 1024 / 1024 / 1024:.2f} GB \n    Total {ram.total / 1024 / 1024 / 1024:.4} GB```') # Send message
@@ -155,14 +154,14 @@ async def calc(ctx: commands.Context):
 
 
 
-@bot.command(aliases = ("w",)) # Weather report to make it work you need to get an api key
-async def weather(ctx, city: str = None): # If there is nothing after command = either send an error message or send actual weather if set their city in locations.json
+@bot.command(aliases = ("w",)) # Weather report. to make it work you will need to use your own api key
+async def weather(ctx, city: str = None): # If there is nothing after command = either send an error message or send actual weather if user's city is in locations.json
     with open("locations.json", "r") as f: # Open the file
         locations = json.load(f)
     
-    if city is None: # If there is nothing after command
+    if city is None: # If there's nothing after command
         user_id = ctx.author.name # Get user id
-        if user_id in locations: # Check if user in the list 
+        if user_id in locations: # Check if user is in the list 
             city = locations[user_id] # If in the list - Continue
         else: # If not
             await ctx.reply(f'Please provide a city name or use !set to save your location.')
@@ -177,7 +176,7 @@ async def weather(ctx, city: str = None): # If there is nothing after command = 
         await ctx.reply(f'Sorry, I could not find the weather for {city}.')
         return
 
-    # Get weather data from api in json
+    # Get weather data from api
     temp = data['main']['temp']
     feels_like = data['main']['feels_like']
     humidity = data['main']['humidity']
@@ -188,7 +187,7 @@ async def weather(ctx, city: str = None): # If there is nothing after command = 
     name = data['name']
     #
 
-    # Format in embed, hypothetically you can make it more beauty, but I think this looks well too
+    # Format in embed, hypothetically you can make it look much better
     embed = discord.Embed(title=f"Current weather in {name}🏢", color=discord.Colour.green())
     embed.add_field(name="Description", value=f"{description}🌤", inline=True)
     embed.add_field(name="", value=f"", inline=False) 
@@ -202,12 +201,12 @@ async def weather(ctx, city: str = None): # If there is nothing after command = 
     embed.add_field(name="Wind speed", value=f"{wind_speed}m/s", inline=True)
     #
 
-    await ctx.reply(embed=embed) #Send message
+    await ctx.reply(embed=embed) #Send a message
 
 
 
 
-@bot.command(description="Set default location for weather") # Save location for weather command
+@bot.command(description="Set default location for weather") # Save location for the weather command
 async def set(ctx, city: str):
 
     with open("locations.json", "r") as f: #Load
@@ -219,7 +218,7 @@ async def set(ctx, city: str):
     with open("locations.json", "w") as f: #Save
         json.dump(locations, f)
 
-    await ctx.reply(f'Your location has been set to {city}.') # Send confirmation, Better put the whole command in "try:" for debugging, and if something happens it will send an error message (TODO though)
+    await ctx.reply(f'Your location has been set to {city}.') # Send confirmation, 
 ##
 
 def load_locations(self):
@@ -238,7 +237,7 @@ def save_locations(self):
 @bot.command() # Wikipedia
 async def wiki(ctx: commands.Context, language, *, search : str =None):
     try: 
-        if search is None: # If there is only search promt, it will use English wikipedia
+        if search is None: # If there's only a search promt, it will use English wikipedia by default.
             url1 = f'https://en.wikipedia.org/api/rest_v1/page/summary/{language}'
             response1 = requests.get(url1)
             data1 = response1.json()
@@ -251,7 +250,7 @@ async def wiki(ctx: commands.Context, language, *, search : str =None):
             await ctx.reply(message1)
             return
 		
-	# If you want to search around in other language
+	# If you want to search in specific language
         url = f'https://{language}.wikipedia.org/api/rest_v1/page/summary/{search}'
         response = requests.get(url)
         data = response.json()
@@ -263,11 +262,11 @@ async def wiki(ctx: commands.Context, language, *, search : str =None):
         message = f'{title} - {more} | {link}'
 
         await ctx.reply(message)
-    except Exception as e: # Exception if theres an error or nothing found
+    except Exception as e: # Exception if there's an error or nothing found
         await ctx.reply(f"Nothing found")
     return
 
-@bot.command() # Spam command, since discord are assholes it slow and works as shit. do not try to run it with numbers large than 20
+@bot.command() # Spam command, since discord are assholes, it spams very slow 
 async def spam(ctx, count: int, *message):
     try:
         message = " ".join(message) # message
@@ -277,7 +276,7 @@ async def spam(ctx, count: int, *message):
         await ctx.send(message)
 
 
-@bot.command(aliases = ("t",)) # Translator command. api is free but has their restrictions, 5k words per day or something
+@bot.command(aliases = ("t",)) # Translator command. api is free but has some restrictions, 5k words per day or something
 async def tl(ctx: commands.Context):
 
     message = [x.strip() for x in ctx.message.content.split("|", maxsplit=2)] 
@@ -298,10 +297,10 @@ async def tl(ctx: commands.Context):
 
 
 
-@bot.command(aliases = ("py",)) # Pyramid, again the same thing as spam = slow as fuck, do not use it with large numbers 
+@bot.command(aliases = ("py",)) # Pyramid, the same thing as spam = slow as fuck, don't use it with large numbers 
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def pyramid(ctx, emote: str, num: int = 3):
-    if num < 1 or num > 20: # 20 messages limit (double the number for limit, for instance, here the output is 40 messages)
+    if num < 1 or num > 20: # 20 messages limit (double the number for a real deal, for instance, here is the output, and it will be 40 messages long)
         return
 
     messages = []
@@ -319,13 +318,13 @@ async def pyramid(ctx, emote: str, num: int = 3):
 
 
 
-@bot.command(aliases = ("re",)) # Simple reminder, saves reminds in local dictionary, you can make it to save it to json, but IMHO it's too slow
+@bot.command(aliases = ("re",)) # Simple reminder
 async def remind(ctx):
     try:
         time, message = [x.strip() for x in ctx.message.content.split(maxsplit=2)[1:]] # Get time and message
         seconds = convert(time) # Convert the time
     except ValueError:
-        await ctx.reply(f"Please provide a valid time and message.") # If user sent incorrect format
+        await ctx.reply(f"Please provide a valid time and message.") # If user sent an incorrect format
         return
 
     await ctx.reply(f"I will remind you in {time} < {message} >") # It will remind them in X time
@@ -345,13 +344,12 @@ def convert(time): # Time the bot can understand
 #
 
 
-@bot.command() # Check if site is down. I so hate this code and how it looks, literally soydev™. but surprisingly, it works quite well
+@bot.command() # Check if given website is down
 async def site(ctx, site: str):
     url = f'https://sitecheck.sucuri.net/api/v3/?scan={site}' 
     response = requests.get(url)
     data = response.json()
 
-	# I dont even want to explain how it works, I feel ashamed when I look at it
     try:
         site = data['site']['final_url']
     except KeyError:
@@ -377,13 +375,13 @@ async def site(ctx, site: str):
 
 @bot.command(aliases = ("u",)) # Get user info  
 async def user(ctx, user: typing.Optional[commands.UserConverter] = None):
-    if user is None: # If theres nothing after command = use author name
+    if user is None: # If user wasn't given - use author's name
         user = ctx.author
 	#
     guild = ctx.guild
     member = guild.get_member(user.id)
 	#
-    embed = discord.Embed() # It also can check users that ARE NOT joined the server
+    embed = discord.Embed()
     embed.title = f"{user.name}#{user.discriminator}" # Since discord removed discriminators, it puts just zero after # (but only for regular accounts, bots still have them)
     embed.description = f"{user.mention}" # I dont know if I can fetch users bio, i just put a mention then, if you dont want to ping someone remove it.
     embed.color = discord.Color.random() 
@@ -400,7 +398,7 @@ async def user(ctx, user: typing.Optional[commands.UserConverter] = None):
 ### Role commands
 ###
 @bot.group() # Group for role commands
-@commands.has_role("Moderator") # Change or create this role on your server
+@commands.has_role("Moderator") # Access role
 async def role(ctx):
   if ctx.invoked_subcommand is None:
     await ctx.reply("Specify a valid subcommand: list, display, create, delete, give, remove, color, rename")
@@ -420,7 +418,7 @@ async def display(ctx, role_name: str):
     await ctx.reply(f"Displaying of {role_name} switched to {new_hoist}.")
 ####
 ####
-@role.command() # Create a new role. DO NOT USE SPACES. THE ROLE WILL BE CREATED WITHOUT ANY PERMISSIONS. Even without ping permissions, it means that you cant ping it
+@role.command() # Create a new role. DO NOT USE SPACES. ROLE WILL BE CREATED WITHOUT PING PERMISSIONS. It means that you wont be able to ping it
 async def create(ctx, name, color: discord.Color = None):
     if color is None:
         await ctx.guild.create_role(name=name, color=discord.Color.random()) # Make a new role with a random color
@@ -452,11 +450,11 @@ async def remove(ctx, role: discord.Role, *, member: discord.Member, ):
   await ctx.reply(f"Removed {role.name} from {member.name}")
 ####
 ####
-@role.command() # Sends a list of roles, more information about roles can be added in the list, but im lazy
+@role.command() # Sends a list of roles, more information about roles can be added in the list
 async def list(ctx):
   rolelist = [role.name for role in ctx.guild.roles] 
   roles = ", \n".join(rolelist)
-  await ctx.reply(f"```{roles}```") # Dont remove code formatting, it pings a whole server by @everyone, (btw you can use "replace" to remove @everyone from output)
+  await ctx.reply(f"```{roles}```") # Don't remove a "code formatting". It pings a whole server by @everyone
 ####
 ####
 @role.command() # Change color of role
@@ -465,13 +463,13 @@ async def color(ctx, role: discord.Role, color: discord.Color):
   await ctx.reply(f"Color of {role.name} changed to {color}")
 ####
 ####
-@role.command() # Remember do not use spaces in role names
+@role.command()
 async def rename(ctx, role: discord.Role, *, name: str):
   await role.edit(name=name)
   await ctx.reply(f"Name of {role.name} changed to {name}")
 ####
 ####
-@role.command() # Move role in role list, to bottom or top
+@role.command() # Move role in the role list, to bottom or top
 async def move(ctx, role_name: str, direction: str):
     guild = ctx.guild
     role = discord.utils.get(guild.roles, name=role_name)
@@ -493,34 +491,34 @@ async def move(ctx, role_name: str, direction: str):
 
 
 @bot.group() # Management of members
-@commands.has_role("Moderator") # You can use the same role role create a new one
+@commands.has_role("Moderator") # Access role
 async def member(ctx):
   if ctx.invoked_subcommand is None:
     await ctx.reply("Please specify a valid subcommand: mute, ban, unban, kick")
 ####
 ####
-@member.command() # Ban someone (forever btw)
+@member.command() # Ban someone (forever)
 async def ban(ctx, member: discord.Member, *, reason=None):
     await member.ban(reason=reason)
     await ctx.send(f"{member} has been banned for {reason}.")
 ####
 ####
-#@member.command() # DOES NOT WORK. it cant unban, and I dont know how to fix it
+#@member.command() # DOES NOT WORK. it can't unban
 #async def unban(ctx, id: int):
 #    user = await client.fetch_user(id)
 #    await ctx.guild.unban(user)
 #    await ctx.send(f"{user} has been unbanned.")
 ####
 ####
-@member.command() #Kick someone
+@member.command()
 async def kick(ctx, member: discord.Member, *, reason=None):
     await member.kick(reason=reason)
     await ctx.send(f'{member} has been kicked.')
 ####
 ####
-@member.command() # Mute someone, it will create a new role, if you already have a role for "mute" just rename these lines ** 
+@member.command() # Mute someone, it will create a new role, if you already have any role for mute, use this name in the code below
 @commands.has_permissions(manage_messages=True) 
-async def mute(ctx, member: discord.Member): # Also, an another TODO: Create a timer mute and permanent one.
+async def mute(ctx, member: discord.Member): 
   role = discord.utils.get(ctx.guild.roles, name="Muted") # This *
   guild = ctx.guild
   if role not in guild.roles:
@@ -533,9 +531,9 @@ async def mute(ctx, member: discord.Member): # Also, an another TODO: Create a t
     await ctx.reply(f"{member} has been muted")
 ####
 ####
-@bot.command(aliases = ("stalk",)) # Get last message from user, (from all servers)
+@bot.command(aliases = ("stalk",)) # Get last message from user
 async def ls(ctx, user: discord.Member):
-    with open("last_seen.json", "r") as f: # Does not work, remove or fix
+    with open("last_seen.json", "r") as f: 
         last_seen = json.load(f)
 
     user_id = str(user.id) 
@@ -554,12 +552,12 @@ async def ls(ctx, user: discord.Member):
 
 
 
-@bot.command() # I dont know if it works on windows, but make sure that only you can execute this command, since subrocess is basicly a shell, someone could run "rm -rf /" and destroy your system.
+@bot.command() # I dont know if it works on Windows, but make sure that only you can execute this command, since subrocess is basicly a shell, someone can jsut run "rm -rf /" and destroy your system.
 async def cmd(ctx: commands.Context, *, command): 
-    if ctx.author.name == "v1ss0nd": # Your discord name, if you will run the bot on large servers, its better to use ID instead, probably, I dont trust discord's new name system
+    if ctx.author.name == "v1ss0nd": # Your discord name
         try: # It's also possible to allow this command only in bot's DM, if you will
             message = subprocess.getoutput(f'{command}') 
-            await ctx.send(f"```{message}```") # Get output, and no, it can not display neofetch.
+            await ctx.send(f"```{message}```") # Get output
         except Exception as e:   
             await ctx.send(f"{e}") # Error message
         return
@@ -568,17 +566,17 @@ async def cmd(ctx: commands.Context, *, command):
 
 
 
-@bot.command() # Joins the bot to voice channel
+@bot.command() # Joins the bot to a voice channel
 async def join(context: commands.Context) -> discord.VoiceProtocol:
     if context.author.voice is None: # Connects to the same voice channel as author in
         return await context.reply("You are not in voice channel.")
     channel = context.author.voice.channel
 
-    client = context.voice_client	# Works as shit after recent updates, And better make auto-disconnect after some time, :TODO:
+    client = context.voice_client
     if client is None:
         client = await channel.connect()
     if client.is_connected() and client.channel != channel:
-        await client.move_to(channel) # another soydev™ instance
+        await client.move_to(channel) 
 
     return client
 
@@ -593,7 +591,7 @@ async def leave(ctx):
     await ctx.reply("I am not in any voice channel.")
 
 
-@bot.command() # Stop playing everything, I tried to make a pause command but it didnt work in the way I expected
+@bot.command() # Stop playing everything, I tried to make a pause command but it didn't work in the way I expected
 async def stop(ctx):
   vc = ctx.voice_client
   if vc and vc.is_connected():
@@ -603,7 +601,7 @@ async def stop(ctx):
     await ctx.reply("Nothing playing rn")
 
 
-	## Not my code, All credits (and questions) to solarless
+	## Not my code, all credits to solarless
 @bot.command() # Plays attached audio file, saves the download files in main bot's folder, you can create a special folder for it, or delete it automaticly after disconnect from voice channel.
 async def playfile(context: commands.Context, repeat: bool = False) -> None:
     client = await join(context)
