@@ -1,6 +1,5 @@
 # Discord Python Bot
 
-If you got there only to add it to your server, you need to host it by yourself.↓↓↓
 # The only way to get this bot:
 1. Create an application on Discord's developer portal and configure the bot settings
 2. Install all **libraries**
