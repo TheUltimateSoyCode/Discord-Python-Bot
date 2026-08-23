@@ -73,7 +73,7 @@ async def on_message(message: Message):
     time_ = datetime.datetime.now() 
     last_seen[user_id] = (content, time_) 
     
-    last_seen_str = {k: (v[0], v[1].strftime("%Y-%m-%d %H:%M:%S")) for k, v in last_seen.items()} # Time format
+    last_seen_str = {k: (v[0], v[1].strftime("%Y-%m-%d %H:%M:%S")) for k, v in last_seen.items()} 
 
     with open("last_seen.json", "w") as f:
         json.dump(last_seen_str, f)
@@ -236,7 +236,7 @@ async def spam(ctx, count: int, *message):
         await ctx.send(message)
 
 
-@bot.command(aliases = ("t",)) # Translator command. the api is free but with some limitations, 5k words per day or something
+@bot.command(aliases = ("t",)) 
 async def tl(ctx: commands.Context):
 
     message = [x.strip() for x in ctx.message.content.split("|", maxsplit=2)] 
